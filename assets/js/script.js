@@ -2,21 +2,26 @@ $("#currentDay").text(moment().format('MMM Do YYYY'));
 var saveBtn = $('.saveBtn');
 
 var colorChange = function() {
-  var thisHour = moment().hours('H');
+  var thisHour = moment().hours();
   $(".time-block").each(function() {
-    var timeblockHour = parseInt($(this).attr("id"));
+    var timeblockHour = parseInt($(this).attr("id").split("-")[1]);
     console.log(this);
-    if (timeblockHour > thisHour) {
-      $(this).addClass("future");
+    if (timeblockHour < thisHour) {
+      $(this).addClass("past");
     }
     else if (timeblockHour === thisHour) {
+      $(this).removeClass("past");
       $(this).addClass("present");
     }
     else {
-      $(this).addClass("past");
+      $(this).removeClass("past");
+      $(this).removeClass("present");
+      $(this).addClass("future");
     }
   })
 };
+
+colorChange();
 
 saveBtn.on("click", function() {
   var time = $(this).siblings(".hour").text();
@@ -36,5 +41,5 @@ function eventPlan() {
   });
 }
 
-colorChange();
+
 eventPlan();
