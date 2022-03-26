@@ -1,27 +1,40 @@
 $("#currentDay").text(moment().format('MMM Do YYYY'));
-var saveBtn = $('#saveBtn');
+var saveBtn = $('.saveBtn');
 
 var colorChange = function() {
-  var thisHour = moment().hours();
+  var thisHour = moment().hours('H');
   $(".time-block").each(function() {
-    var timeblockHour = parseInt($(this).attr("id").split("=")[i]);
-
-    if (thisHour > timeblockHour) {
-      $(this).addClass("past");
+    var timeblockHour = parseInt($(this).attr("id"));
+    console.log(this);
+    if (timeblockHour > thisHour) {
+      $(this).addClass("future");
     }
-    else if (thisHour === timeblockHour) {
+    else if (timeblockHour === thisHour) {
       $(this).addClass("present");
     }
     else {
       $(this).addClass("past");
     }
-  });
+  })
 };
 
 saveBtn.on("click", function() {
   var time = $(this).siblings(".hour").text();
-  var event = $(this).siblings("description");
+  var events = $(this).siblings(".description").val();
 
-  localStorage.setItem(time, event);
+  localStorage.setItem(time, events);
 });
 
+function eventPlan() {
+  $(".hour").each(function(){
+    var thisHour = $(this).text();
+    var thisEvent = localStorage.getItem(thisHour);
+
+    if(thisEvent !== null) {
+      $(this).siblings(".description").val(thisEvent);
+    }
+  });
+}
+
+colorChange();
+eventPlan();
